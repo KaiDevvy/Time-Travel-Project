@@ -19,15 +19,24 @@ export class Switch extends Interactable
         this.offset = new Vector2(8*GameData.spriteScale,8*GameData.spriteScale)
         this.instanceID = id + ',' + doorID;
 
-        Player.collisionTests.push(
-            {
-                name: this.instanceID,
-                x: (this.doorRef.x * GameData.spriteScale * 16) - (GameData.spriteScale * 16), 
-                y: (this.doorRef.y * GameData.spriteScale * 16), 
-                w: GameData.spriteScale*16*3, 
-                h: GameData.spriteScale*16
-            }
-        )
+        
+        if (localStorage.getItem(this.instanceID) !== null)
+        {
+            this.isOpen = true;
+            this.canInteract = false;
+        }
+        else{
+            Player.collisionTests.push(
+                {
+                    name: this.instanceID,
+                    x: (this.doorRef.x * GameData.spriteScale * 16) - (GameData.spriteScale * 16), 
+                    y: (this.doorRef.y * GameData.spriteScale * 16), 
+                    w: GameData.spriteScale*16*3, 
+                    h: GameData.spriteScale*16
+                }
+            )
+        }
+
     }
 
     onInteract()
@@ -37,6 +46,7 @@ export class Switch extends Interactable
         let index = Player.collisionTests.indexOf(Player.collisionTests.find(v=>v.name == this.instanceID));
         Player.collisionTests.splice(index, 1);
         this.isOpen = true;
+        localStorage.setItem(this.instanceID, "open");
     }
 
     draw()

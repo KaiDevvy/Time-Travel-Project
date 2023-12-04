@@ -6,7 +6,7 @@ export class Rewind extends Entity
 {
     static instance;
     static enabled = true;
-    #counter = 0;
+    #maxTime = 10000;
     #posLog = [];
     #reversing = false;
     #lastRewind;
@@ -30,13 +30,13 @@ export class Rewind extends Entity
 
     draw(ctx)
     {
-        /* == Back Panel == */
+        let progress = (performance.now() - this.#lastRewind) / this.#maxTime;
 
 
 
         /* == Text == */
         
-        let value = this.#reversing || !Rewind.enabled ? Math.floor(Math.random() * 10) : 10 - Math.floor((this.#counter / 1000) * 10);
+        let value = this.#reversing || !Rewind.enabled ? Math.floor(Math.random() * 10) : 10 - Math.floor(10 * progress);
         if ((value + '').length == 1 && this.#reversing)
         value = Math.floor(Math.random() * 10) + '' + value;
     
@@ -59,7 +59,7 @@ export class Rewind extends Entity
             xPos = GameData.screen.halfWidth - (width/2) - 14,
             yPos = Math.max(GameData.screen.height * 0.05, 30) - (height/4);
 
-        let sinOffset = Math.sin( (this.#counter/1000 ** 0.8)) * 2;
+        let sinOffset = Math.sin(progress * 8) * 2;
 
         xPos -= sinOffset;
         yPos -= sinOffset;
@@ -86,19 +86,20 @@ export class Rewind extends Entity
 
     record()
     {
-        if (this.#counter % 4 == 0)
+        let progress = (performance.now() - this.#lastRewind) / this.#maxTime;
+        console.log(progress % 0.1);
+
+        if (progress % 0.01 < 0.0015)
         {
             this.#posLog[this.#posLog.length] = this.player.position.x;
             this.#posLog[this.#posLog.length] = this.player.position.y;
         }
 
-        if (this.#counter > 1000)
+        if (progress > 1)
         {
-            this.#counter = 0;
+            this.#lastRewind = performance.now();
             this.#reversing = true;
         }
-
-        this.#counter++;
     }
 
 }

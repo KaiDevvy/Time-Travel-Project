@@ -84,12 +84,20 @@ export class Player extends Entity
         if (Input.IsKeyDown("d"))
             moveOffset.x += moveSpeed;
 
+        if (Input.IsKeyDown("i"))
+            window.location.href = "./lEdit.html";
+
         if (this.nippleVector.x !== 0 || this.nippleVector.y !== 0)
         {
             moveOffset.x = this.nippleVector.x * moveSpeed
             moveOffset.y = this.nippleVector.y * moveSpeed;
         }
 
+        if (Input.IsKeyDown("p"))
+        {
+            localStorage.clear();
+            Camera.shake(20, 0.3)
+        }
         
 
         if (Input.IsKeyDown(" "))
