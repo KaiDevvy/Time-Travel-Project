@@ -76,6 +76,7 @@ export class Rewind extends Entity
 
         if (this.#posLog.length == 0)
         {
+            this.#lastRewind = performance.now();
             this.#reversing = false;
             return;
         }
@@ -87,7 +88,6 @@ export class Rewind extends Entity
     record()
     {
         let progress = (performance.now() - this.#lastRewind) / this.#maxTime;
-        console.log(progress % 0.1);
 
         if (progress % 0.008 < 0.0015)
         {
@@ -97,7 +97,6 @@ export class Rewind extends Entity
 
         if (progress > 1)
         {
-            this.#lastRewind = performance.now();
             this.#reversing = true;
         }
     }
