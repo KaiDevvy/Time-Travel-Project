@@ -89,7 +89,7 @@ export class Rewind extends Entity
         let progress = (performance.now() - this.#lastRewind) / this.#maxTime;
         console.log(progress % 0.1);
 
-        if (progress % 0.01 < 0.0015)
+        if (progress % 0.008 < 0.0015)
         {
             this.#posLog[this.#posLog.length] = this.player.position.x;
             this.#posLog[this.#posLog.length] = this.player.position.y;
